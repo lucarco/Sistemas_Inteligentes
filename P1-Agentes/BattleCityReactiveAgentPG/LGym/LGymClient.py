@@ -163,7 +163,7 @@ class LGymClient:
 def agentLoop(agent, debug, hostName = None, hostPort = 80) :
     print("LGymClientInit")
     if  hostName == None:
-        hName = LGymC.getHostName()
+         hName = LGymC.getHostName()  
     else:
         hName = hostName
     client = LGymClient(hName,hostPort,agent.Id())

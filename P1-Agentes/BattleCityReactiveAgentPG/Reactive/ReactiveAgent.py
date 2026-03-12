@@ -1,14 +1,20 @@
 from Agent.BaseAgent import BaseAgent
 from StateMachine.StateMachine import StateMachine
 from States.GoToCommandCenter import GoToCommandCenter
-
+from States.Defense import Defense
 
 class ReactiveAgent(BaseAgent):
     def __init__(self, id, name):
         super().__init__(id, name)
         dictionary = {
-        "GoToCommandCenter" : GoToCommandCenter("GoToCommandCenter")
+        "GoToCommandCenter" : GoToCommandCenter("GoToCommandCenter"),
+        "Defense": Defense("Defense") 
         }
+        # --- CÓDIGO DE DEPURACIÓN ---
+        print("--------------------------------------------------")
+        print("DEBUG: Las llaves del diccionario son:", dictionary.keys())
+        print("--------------------------------------------------")
+        # ----------------------------
         self.stateMachine = StateMachine("ReactiveBehavior",dictionary,"GoToCommandCenter")
 
     #Metodo que se llama al iniciar el agente. No devuelve nada y sirve para contruir el agente
