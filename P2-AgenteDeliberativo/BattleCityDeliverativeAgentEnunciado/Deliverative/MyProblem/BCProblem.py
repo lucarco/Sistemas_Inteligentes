@@ -32,14 +32,37 @@ class BCProblem(Problem):
     #Calcula la heuristica del nodo en base al problema planteado (Se necesita reimplementar)
     def Heuristic(self, node):
         #TODO: heurística del nodo
-        print("Aqui falta ncosas por hacer :) ")
-        return 0
+        print( "Se esta calculando la Heuristica de ", node)
+        if self.goal == None:
+            return 0
+        # Basado en las diapositvias de la heurisitica de manhattan, lit eso
+        return abs(self.goal.x - node.x) + abs(self.goal.y - node.y)
 
     #Genera la lista de sucesores del nodo (Se necesita reimplementar)
     def GetSucessors(self, node):
-        successors = []
         #TODO: sucesores de un nodo dado
-        print("Aqui falta ncosas por hacer :) ")
+        # print("Aqui falta ncosas por hacer :) ")
+        print("Aqui esta GerSucessors")
+
+        successors = []
+
+        # Posibles movimientos: der, izq, arriba, abajo
+        movimientos = [(1,0),(-1,0),(0,1),(0,-1)]
+
+        # direccion x y direccion y
+        for dx, dy in movimientos:
+            nx = node.x + dx    # nuevo pos del nodo en x
+            ny = node.y + dy    # nuevo pos del nodo en y
+
+            # el mundo es un 36x36 con un borde de 2 en los 4 laterales
+            if 0 <= nx < self.xSize and 0 <= ny < self.ySize:
+                valor_casilla = self.map[nx][ny]
+
+                if BCProblem.CanMove(valor_casilla): # si se puede mover
+                    # CreateNode() se encarga de calcular la heurísitica y calcular el coste
+                    self.CreateNode(successors, node, nx, ny)
+
+
         return successors
     
     #métodos estáticos
@@ -93,8 +116,21 @@ class BCProblem(Problem):
     @staticmethod
     def GetCost(value):
         #TODO: debes darle un coste a cada tipo de casilla del mapa.
-        print("Aqui falta ncosas por hacer :) ")
-        return sys.maxsize
+        # print("Aqui falta ncosas por hacer :) ")
+        print("Se está cogiendo el valor de ", value)
+        #
+        if value == AgentConsts.NOTHING or value >= AgentConsts.PLAYER:
+            # Los valores dinamicos son los >= ; se pueden hacer mas ifs para el futuro
+            return 1
+        if value == AgentConsts.BRICK or value == AgentConsts.SEMI_BREKABLE:
+            # Se tarda un algo en romper cosas
+            return 1
+        if value == AgentConsts.UNBREAKABLE or value == AgentConsts.SEMI_UNBREKABLE:
+            # Mala pinta
+            return sys.maxsize
+        else:
+            # No se que mas me puedo encotrar pero 1
+            return 1
     
     def CreateNode(self,successors,parent,x,y):
         value=self.map[x][y]

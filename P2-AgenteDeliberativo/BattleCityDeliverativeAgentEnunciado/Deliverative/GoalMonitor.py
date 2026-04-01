@@ -20,16 +20,54 @@ class GoalMonitor:
     def NeedReplaning(self, perception, map, agent):
         if self.recalculate:
             self.lastTime = perception[AgentConsts.TIME]
+            self.recalculate = False # reseteamos la flag
             return True
         #TODO definir la estrategia de cuando queremos recalcular
         #puede ser , por ejemplo cada cierto tiempo o cuanod tenemos poca vida.
+
+        current_time = perception[AgentConsts.TIME]
+        # replanificamos cada 10 ticks(ns q es un tick)
+        if self.lastTime == -1 or current_time > self.lastTime + 10:
+            self.lastTime = current_time
+            return True
+        
+        # replanificamos tambien si nos queda 1 sola vida
+        if perception[AgentConsts.HEALTH] == 1 and self.lastTime != current_time:
+            self.lastTime = current_time
+            return True
+
+        # Si el agente no tiene plan o ya lo ha terminado, necesita uno nuevo
+        if agent.plan == None or len(agent.plan) == 0:
+            self.lastTime = current_time
+            return True
+
         return False
     
     #selecciona la meta mas adecuada al estado actual
     def SelectGoal(self, perception, map, agent):
         #TODO definir la estrategia del cambio de meta
-        print("TODO aqui faltan cosas :)")
-        return self.goals[random.randint(0,len(self.goals))]
+        # print("TODO aqui faltan cosas :)")
+        # Hay 3 tipos de goals: 0 = CC, 1 = Vida y 2 = Player
+ 
+        # Si solo nos queda una vida
+        if perception[AgentConsts.HEALTH] <= 1 and perception[AgentConsts.LIFE_X] != -1:
+            return self.goals[self.GOAL_LIFE]
+        
+        # Si vamos al CC
+        if perception[AgentConsts.COMMAND_CENTER_X] != -1:
+            return self.goals[self.GOAL_COMMAND_CENTRER]
+        
+        """
+        # Si vamos a por el otro pq mola
+        if perception[AgentConsts.PLAYER_X] != -1:
+            return self.goals[self.GOAL_PLAYER]   
+        """
+
+        # estamos al final
+        return self.finalGoal
+
+        
+        # return self.goals[random.randint(0,len(self.goals))]
     
     def UpdateGoals(self,goal, goalId):
         self.goals[goalId] = goal
