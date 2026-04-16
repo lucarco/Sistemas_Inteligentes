@@ -70,7 +70,7 @@ class BCProblem(Problem):
     #parámetro
     @staticmethod
     def CanMove(value):
-        return value != AgentConsts.UNBREAKABLE and value != AgentConsts.SEMI_UNBREKABLE and value != AgentConsts.SEMI_UNBREKABLE
+        return value != AgentConsts.UNBREAKABLE and value != AgentConsts.SEMI_UNBREKABLE and value != AgentConsts.SEMI_BREKABLE
     
     #convierte coordenadas mapa en formato vector a matriz
     @staticmethod
@@ -122,10 +122,11 @@ class BCProblem(Problem):
         if value == AgentConsts.NOTHING or value >= AgentConsts.PLAYER:
             # Los valores dinamicos son los >= ; se pueden hacer mas ifs para el futuro
             return 1
-        if value == AgentConsts.BRICK or value == AgentConsts.SEMI_BREKABLE:
+       # if value == AgentConsts.BRICK or value == AgentConsts.SEMI_BREKABLE:
+        if value == AgentConsts.BRICK:
             # Se tarda un algo en romper cosas
             return 1
-        if value == AgentConsts.UNBREAKABLE or value == AgentConsts.SEMI_UNBREKABLE:
+        if value == AgentConsts.UNBREAKABLE or value == AgentConsts.SEMI_UNBREKABLE or AgentConsts.SEMI_BREKABLE:
             # Mala pinta
             return sys.maxsize
         else:
