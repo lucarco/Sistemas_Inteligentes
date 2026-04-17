@@ -53,6 +53,12 @@ class ExecutePlan(State):
         else:
             move = self.GetDirection(nextNode,x,y)
             shot = nextNode.value == AgentConsts.BRICK or nextNode.value == AgentConsts.COMMAND_CENTER
+
+        if nextNode.value == AgentConsts.BRICK :
+            print("Delante tengo Ladrillo")
+        elif nextNode.value == AgentConsts.NOTHING :
+            print("Delante tengo NADA")
+
         self.lastMove = move
         return move, shot
 
@@ -60,7 +66,9 @@ class ExecutePlan(State):
         if self.transition != None and self.transition != "":
             return self.transition
         elif self.noMovements > 5:
+            print("Antiatasco activado")
             return "RandomMovement"
+        #si detecta una bala entrar al estado defense
         return self.id
 
     @staticmethod

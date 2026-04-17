@@ -40,29 +40,15 @@ class BCProblem(Problem):
 
     #Genera la lista de sucesores del nodo (Se necesita reimplementar)
     def GetSucessors(self, node):
-        #TODO: sucesores de un nodo dado
-        # print("Aqui falta ncosas por hacer :) ")
-        print("Aqui esta GerSucessors")
-
         successors = []
-
-        # Posibles movimientos: der, izq, arriba, abajo
-        movimientos = [(1,0),(-1,0),(0,1),(0,-1)]
-
-        # direccion x y direccion y
-        for dx, dy in movimientos:
-            nx = node.x + dx    # nuevo pos del nodo en x
-            ny = node.y + dy    # nuevo pos del nodo en y
-
-            # el mundo es un 36x36 con un borde de 2 en los 4 laterales
-            if 0 <= nx < self.xSize and 0 <= ny < self.ySize:
-                valor_casilla = self.map[nx][ny]
-
-                if BCProblem.CanMove(valor_casilla): # si se puede mover
-                    # CreateNode() se encarga de calcular la heurísitica y calcular el coste
-                    self.CreateNode(successors, node, nx, ny)
-
-
+        if node.x - 1 >= 0:
+            self.CreateNode(successors, node, node.x - 1, node.y)
+        if node.x + 1 < self.xSize:
+            self.CreateNode(successors, node, node.x + 1, node.y)
+        if node.y - 1 >= 0:
+            self.CreateNode(successors, node, node.x, node.y - 1)
+        if node.y + 1 < self.ySize:
+            self.CreateNode(successors, node, node.x, node.y + 1)
         return successors
     
     #métodos estáticos
@@ -118,20 +104,16 @@ class BCProblem(Problem):
         #TODO: debes darle un coste a cada tipo de casilla del mapa.
         # print("Aqui falta ncosas por hacer :) ")
         print("Se está cogiendo el valor de ", value)
-        #
-        if value == AgentConsts.NOTHING or value >= AgentConsts.PLAYER:
-            # Los valores dinamicos son los >= ; se pueden hacer mas ifs para el futuro
+        if value == AgentConsts.NOTHING or value == AgentConsts.COMMAND_CENTER :
             return 1
-       # if value == AgentConsts.BRICK or value == AgentConsts.SEMI_BREKABLE:
         if value == AgentConsts.BRICK:
             # Se tarda un algo en romper cosas
-            return 1
+            return 2
         if value == AgentConsts.UNBREAKABLE or value == AgentConsts.SEMI_UNBREKABLE or AgentConsts.SEMI_BREKABLE:
             # Mala pinta
             return sys.maxsize
         else:
-            # No se que mas me puedo encotrar pero 1
-            return 1
+            return sys.maxsize
     
     def CreateNode(self,successors,parent,x,y):
         value=self.map[x][y]
