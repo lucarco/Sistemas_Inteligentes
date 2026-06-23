@@ -44,6 +44,22 @@ class GoalMonitor:
         # 1. Solo nos queda una vida y hay vida accesible => objetivo ir hacia la vida
         if perception[AgentConsts.HEALTH] <= 1 and perception[AgentConsts.LIFE_X] != -1 and perception[AgentConsts.LIFE_Y] != -1:
             return self.goals[self.GOAL_LIFE]
+<<<<<<< HEAD
+
+        """
+        # Si vamos a por el otro pq mola
+        if perception[AgentConsts.PLAYER_X] != -1:
+            return self.goals[self.GOAL_PLAYER]   
+        """
+        
+        # Si vamos al CC
+        if perception[AgentConsts.COMMAND_CENTER_X] != -1:
+            return self.goals[self.GOAL_COMMAND_CENTRER]
+        
+
+
+        # estamos al final
+=======
         
         # 2. Vamos hacia el jugador porq detectamos que se encuentra a una distancia peligrosa
         playerX = perception[AgentConsts.PLAYER_X]
@@ -60,6 +76,7 @@ class GoalMonitor:
             return self.goals[self.GOAL_COMMAND_CENTRER]
         
         # 4. vamos al Exit
+>>>>>>> 03990353403767fc79a032910c5be4230849d2e9
         return self.finalGoal
     
     def UpdateGoals(self,goal, goalId):
